@@ -49,3 +49,26 @@ Cada perfil tiene sus propias rutinas locales.
 Ajustes > Exportar datos.
 
 El JSON exportado contiene perfiles, entrenamientos, peso corporal y rutinas personalizadas.
+
+
+## Novedades v5 — progreso corporal
+
+Cada perfil puede guardar:
+- Estatura.
+- Peso inicial.
+- Peso objetivo.
+- Pesajes con fecha.
+
+La pantalla Peso muestra:
+- Peso inicial, actual y objetivo.
+- Porcentaje de avance.
+- Kilos bajados o subidos desde el inicio.
+- Kilos restantes hasta el objetivo.
+- IMC actual como dato orientativo.
+- Historial de pesajes.
+
+Valores iniciales incluidos:
+- Gus: 188 cm, 96 kg inicial, objetivo 90 kg.
+- Tam: 160 cm, 65 kg inicial, objetivo 60 kg.
+
+Se pueden editar en Ajustes > Datos corporales.

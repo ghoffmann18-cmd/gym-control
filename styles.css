@@ -84,3 +84,15 @@ button:disabled{opacity:.38;cursor:not-allowed}
 @media(max-width:360px){
   .editor-grid{grid-template-columns:1fr}
 }
+
+
+.progress-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.progress-stat{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:10px}
+.progress-stat strong{display:block;font-size:20px;margin-top:2px}
+.progress-track{height:12px;background:#0d1527;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:12px}
+.progress-fill{height:100%;background:var(--accent);border-radius:999px;transition:width .25s ease}
+@media(max-width:420px){
+  .progress-stats{grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .progress-stat{padding:8px}
+  .progress-stat strong{font-size:17px}
+}

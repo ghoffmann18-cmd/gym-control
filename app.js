@@ -55,8 +55,24 @@ function uid(prefix='id'){
 function emptyData(){
   return {
     profiles: {
-      gus: {name:'Gus', workouts:[], bodyWeight:[], routines:cloneDefaults()},
-      tam: {name:'Tam', workouts:[], bodyWeight:[], routines:cloneDefaults()}
+      gus: {
+        name:'Gus',
+        heightCm:188,
+        startWeightKg:96,
+        goalWeightKg:90,
+        workouts:[],
+        bodyWeight:[],
+        routines:cloneDefaults()
+      },
+      tam: {
+        name:'Tam',
+        heightCm:160,
+        startWeightKg:65,
+        goalWeightKg:60,
+        workouts:[],
+        bodyWeight:[],
+        routines:cloneDefaults()
+      }
     }
   };
 }
@@ -112,6 +128,9 @@ function migrateData(data){
     if(!data.profiles[id]) data.profiles[id] = defaults.profiles[id];
     const p = data.profiles[id];
     p.name = String(p.name || defaults.profiles[id].name).slice(0,30);
+    p.heightCm = clampNumber(p.heightCm, 100, 230, defaults.profiles[id].heightCm);
+    p.startWeightKg = clampNumber(p.startWeightKg, 30, 300, defaults.profiles[id].startWeightKg);
+    p.goalWeightKg = clampNumber(p.goalWeightKg, 30, 300, defaults.profiles[id].goalWeightKg);
     if(!Array.isArray(p.workouts)) p.workouts = [];
     if(!Array.isArray(p.bodyWeight)) p.bodyWeight = [];
     if(!Array.isArray(p.routines) || !p.routines.length){
@@ -566,18 +585,118 @@ function renderHistory(v){
   </div>`;
 }
 
-function renderWeight(v){
-  const weights=[...currentProfile().bodyWeight]
+
+function latestBodyWeight(profile){
+  const list=[...(profile.bodyWeight||[])]
     .sort((a,b)=>b.date.localeCompare(a.date) || (b.createdAt||0)-(a.createdAt||0));
+  return list[0]?.kg ?? profile.startWeightKg ?? null;
+}
+
+function bodyProgress(profile){
+  const start=Number(profile.startWeightKg);
+  const goal=Number(profile.goalWeightKg);
+  const current=Number(latestBodyWeight(profile));
+
+  if(!Number.isFinite(start) || !Number.isFinite(goal) || !Number.isFinite(current)){
+    return null;
+  }
+
+  const total=goal-start;
+  const moved=current-start;
+  let percent = total===0 ? 100 : (moved/total)*100;
+  percent=Math.max(0,Math.min(100,percent));
+
+  const change=current-start;
+  const remaining=goal-current;
+
+  const heightM=Number(profile.heightCm)/100;
+  const bmi = heightM>0 ? current/(heightM*heightM) : null;
+
+  return {
+    start,goal,current,
+    change:Math.round(change*10)/10,
+    remaining:Math.round(remaining*10)/10,
+    percent:Math.round(percent),
+    bmi:Number.isFinite(bmi)?Math.round(bmi*10)/10:null
+  };
+}
+
+function signedKg(n){
+  if(!Number.isFinite(n)) return '';
+  if(n>0) return `+${n} kg`;
+  if(n<0) return `${n} kg`;
+  return '0 kg';
+}
+
+function renderWeight(v){
+  const profile=currentProfile();
+  const weights=[...(profile.bodyWeight||[])]
+    .sort((a,b)=>b.date.localeCompare(a.date) || (b.createdAt||0)-(a.createdAt||0));
+  const progress=bodyProgress(profile);
   const latest=weights[0];
+
+  const direction = progress
+    ? (progress.goal < progress.start ? 'bajar' : progress.goal > progress.start ? 'subir' : 'mantener')
+    : '';
+
+  let progressText='';
+  if(progress){
+    if(direction==='bajar'){
+      const lost=Math.round((progress.start-progress.current)*10)/10;
+      const left=Math.max(0,Math.round((progress.current-progress.goal)*10)/10);
+      progressText=`Has bajado <strong>${lost} kg</strong> desde el inicio. Te faltan <strong>${left} kg</strong> para tu objetivo.`;
+    }else if(direction==='subir'){
+      const gained=Math.round((progress.current-progress.start)*10)/10;
+      const left=Math.max(0,Math.round((progress.goal-progress.current)*10)/10);
+      progressText=`Has subido <strong>${gained} kg</strong> desde el inicio. Te faltan <strong>${left} kg</strong> para tu objetivo.`;
+    }else{
+      progressText='Tu peso inicial y objetivo son iguales.';
+    }
+  }
 
   v.innerHTML=`
     <div class="card">
-      <h2>Peso corporal</h2>
-      ${latest
-        ? `<div class="stat">${latest.kg} kg</div><div class="small muted">Último registro · ${formatDate(latest.date)}</div>`
-        : `<div class="muted">Sin registros.</div>`}
-      <form id="weightForm" style="margin-top:14px">
+      <div class="editor-heading">
+        <div>
+          <h2>Progreso corporal</h2>
+          <div class="small muted">${esc(profile.heightCm)} cm de estatura</div>
+        </div>
+        ${progress?`<span class="badge">${progress.percent}% objetivo</span>`:''}
+      </div>
+
+      ${progress?`
+        <div class="progress-stats">
+          <div class="progress-stat">
+            <div class="small muted">Inicio</div>
+            <strong>${progress.start} kg</strong>
+          </div>
+          <div class="progress-stat">
+            <div class="small muted">Actual</div>
+            <strong>${progress.current} kg</strong>
+          </div>
+          <div class="progress-stat">
+            <div class="small muted">Objetivo</div>
+            <strong>${progress.goal} kg</strong>
+          </div>
+        </div>
+
+        <div class="progress-track" aria-label="Progreso hacia el objetivo">
+          <div class="progress-fill" style="width:${progress.percent}%"></div>
+        </div>
+
+        <div class="notice" style="margin-top:10px">${progressText}</div>
+
+        <div class="small muted" style="margin-top:9px">
+          Cambio total: <strong>${signedKg(progress.change)}</strong>
+          ${progress.bmi?` · IMC actual: <strong>${progress.bmi}</strong>`:''}
+        </div>
+      `:''}
+    </div>
+
+    <div class="card">
+      <h3>Registrar peso</h3>
+      ${latest?`<div class="small muted" style="margin-bottom:10px">Último registro: ${latest.kg} kg · ${formatDate(latest.date)}</div>`:''}
+      <form id="weightForm">
         <div class="field">
           <label>Fecha</label>
           <input id="bodyDate" type="date" value="${todayISO()}">
@@ -587,18 +706,26 @@ function renderWeight(v){
             <label>Peso (kg)</label>
             <input id="bodyKg" inputmode="decimal" type="number" min="30" max="300" step="0.1" required>
           </div>
-          <button class="primary" type="submit" style="align-self:end">Guardar</button>
+          <button class="primary" type="submit" style="align-self:end">Actualizar</button>
         </div>
       </form>
     </div>
+
     <div class="card">
-      <h3>Evolución</h3>
+      <h3>Historial de peso</h3>
       ${weights.length
-        ? weights.map(x=>`
-          <div class="history-item">
-            <div class="history-title"><span>${x.kg} kg</span><span>${formatDate(x.date)}</span></div>
-          </div>`).join('')
-        : `<div class="empty">Añade tu primer peso.</div>`}
+        ? weights.map(x=>{
+            const diff=Math.round((x.kg-profile.startWeightKg)*10)/10;
+            return `
+              <div class="history-item">
+                <div class="history-title">
+                  <span>${x.kg} kg</span>
+                  <span>${formatDate(x.date)}</span>
+                </div>
+                <div class="small muted">Desde el inicio: ${signedKg(diff)}</div>
+              </div>`;
+          }).join('')
+        : `<div class="empty">Todavía no hay pesajes. Tu referencia inicial es ${profile.startWeightKg} kg.</div>`}
     </div>`;
 
   document.getElementById('weightForm').addEventListener('submit',e=>{
@@ -606,11 +733,20 @@ function renderWeight(v){
     const kg=clampNumber(document.getElementById('bodyKg').value,30,300,0);
     if(!kg) return;
 
-    currentProfile().bodyWeight.push({
-      date:document.getElementById('bodyDate').value||todayISO(),
-      kg:Math.round(kg*10)/10,
-      createdAt:Date.now()
-    });
+    const date=document.getElementById('bodyDate').value||todayISO();
+
+    // If a weight already exists for this date, update it instead of duplicating it.
+    const existing=profile.bodyWeight.find(x=>x.date===date);
+    if(existing){
+      existing.kg=Math.round(kg*10)/10;
+      existing.createdAt=Date.now();
+    }else{
+      profile.bodyWeight.push({
+        date,
+        kg:Math.round(kg*10)/10,
+        createdAt:Date.now()
+      });
+    }
 
     saveData();
     render();
@@ -628,6 +764,30 @@ function renderSettings(v){
       <div class="actions" style="margin-top:10px">
         <button class="secondary" id="saveName">Guardar nombre</button>
       </div>
+    </div>
+
+    <div class="card">
+      <h3>Datos corporales</h3>
+      <p class="small muted">Estos datos se usan para calcular tu avance cuando registras nuevos pesos.</p>
+      <form id="bodyProfileForm">
+        <div class="editor-grid">
+          <div class="field">
+            <label>Estatura (cm)</label>
+            <input id="heightCm" type="number" min="100" max="230" step="1" value="${esc(currentProfile().heightCm)}">
+          </div>
+          <div class="field">
+            <label>Peso inicial (kg)</label>
+            <input id="startWeightKg" type="number" min="30" max="300" step="0.1" value="${esc(currentProfile().startWeightKg)}">
+          </div>
+          <div class="field">
+            <label>Peso objetivo (kg)</label>
+            <input id="goalWeightKg" type="number" min="30" max="300" step="0.1" value="${esc(currentProfile().goalWeightKg)}">
+          </div>
+        </div>
+        <div class="actions" style="margin-top:10px">
+          <button class="primary" type="submit">Guardar datos corporales</button>
+        </div>
+      </form>
     </div>
 
     <div class="card">
@@ -659,7 +819,7 @@ function renderSettings(v){
       <button class="ghost" id="changeProfile">Cambiar de perfil</button>
     </div>
 
-    <div class="small muted" style="text-align:center;margin-top:12px">Gym Control v4</div>`;
+    <div class="small muted" style="text-align:center;margin-top:12px">Gym Control v5</div>`;
 
   document.getElementById('saveName').addEventListener('click',()=>{
     const val=document.getElementById('profileName').value.trim();
@@ -668,6 +828,16 @@ function renderSettings(v){
       saveData();
       render();
     }
+  });
+
+  document.getElementById('bodyProfileForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const p=currentProfile();
+    p.heightCm=clampNumber(document.getElementById('heightCm').value,100,230,p.heightCm||170);
+    p.startWeightKg=Math.round(clampNumber(document.getElementById('startWeightKg').value,30,300,p.startWeightKg||70)*10)/10;
+    p.goalWeightKg=Math.round(clampNumber(document.getElementById('goalWeightKg').value,30,300,p.goalWeightKg||70)*10)/10;
+    saveData();
+    render();
   });
 
   document.getElementById('manageRoutines').addEventListener('click',()=>{

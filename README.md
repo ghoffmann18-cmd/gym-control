@@ -29,3 +29,5 @@ La primera vez, cada iPhone puede elegir su perfil. Cada dispositivo recuerda el
 
 
 Versión de caché: v2 (actualizaciones de GitHub Pages mejoradas).
+
+Versión UI: v3 — corregido el solapamiento con la barra de estado / notch / Dynamic Island de iPhone.

@@ -1,83 +1,48 @@
-# Gym Control v4
+# Gym Control v7 — Gus + Tam
 
-PWA personal para registrar rutinas, pesos, repeticiones, piscina y peso corporal.
+Esta actualización reemplaza las antiguas rutinas Fuerza A y Fuerza B por:
 
-## Novedades v4
+## Fuerza torso
+- Press de pecho en máquina / banca — 3x8-10
+- Jalón al pecho — 3x8-10
+- Remo en polea / máquina — 3x8-10
+- Press inclinado máquina / mancuernas — 2x10-12
+- Elevaciones laterales — 2x12-15
+- Curl de bíceps — 2x10-12
+- Tríceps en polea — 2x10-12
 
-- Editor de rutinas dentro de la propia app.
-- Cambiar nombre de ejercicios sin perder la relación con el historial.
-- Cambiar series y rango de repeticiones.
-- Cambiar un ejercicio entre peso/repeticiones y tiempo.
-- Añadir ejercicios.
-- Eliminar ejercicios sin borrar el historial anterior.
-- Reordenar ejercicios.
-- Crear nuevas rutinas.
-- Eliminar y reordenar rutinas.
-- Editar duración y plan de piscina.
-- Rutinas independientes por perfil (Gus / Tam).
-- Restablecer las rutinas originales sin borrar el historial.
-- La copia de seguridad incluye rutinas personalizadas.
+## Fuerza pierna
+- Hack squat o sentadilla Goblet — 3x8-10
+- Peso muerto rumano — 3x8-10
+- Hip thrust — 3x8-10
+- Curl femoral — 2x10-12
+- Extensiones de cuádriceps — 2x10-12
+- Pantorrilla — 3x12-15
 
-## Actualizar desde una versión anterior
+## Piscina
+Se mantiene.
 
-Sustituye en GitHub los archivos del proyecto por los de esta versión y haz Commit.
-NO hace falta borrar el repositorio ni cambiar GitHub Pages.
+La selección se hizo como una fusión de las rutinas de fuerza e hipertrofia de Jhonny,
+pero reduciendo volumen para la vuelta al gimnasio y el objetivo inicial de perder grasa
+sin descuidar fuerza y masa muscular.
 
-La app mantiene la misma clave local (`gymControlV1`), por lo que los entrenamientos y pesos
-ya guardados en el mismo iPhone y bajo la misma URL de GitHub Pages se conservan.
+## Migración
+La app usa la misma clave local `gymControlV1`.
 
-Al abrir v4 por primera vez, si un perfil todavía no tenía rutinas personalizadas, la app copia
-las rutinas originales a ese perfil automáticamente.
+Al abrir v7 por primera vez:
+- conserva Gus y Tam;
+- conserva pesajes;
+- conserva historial;
+- conserva cualquier rutina personalizada adicional;
+- reemplaza específicamente A y B por Fuerza torso y Fuerza pierna;
+- mantiene la rutina de piscina existente si ya la habías editado.
 
-## Editar rutinas
-
-En la app:
-
-Ajustes > Editar rutinas
-
-Cada perfil tiene sus propias rutinas locales.
-
-## Publicar con GitHub Pages
-
-1. Sube `index.html`, `app.js`, `styles.css`, `manifest.json`, `sw.js`, `README.md` y `icons/`.
-2. Settings > Pages.
-3. Deploy from a branch.
-4. `main` y `/ (root)`.
-
-## Copias de seguridad
-
-Ajustes > Exportar datos.
-
-El JSON exportado contiene perfiles, entrenamientos, peso corporal y rutinas personalizadas.
-
-
-## Novedades v5 — progreso corporal
-
-Cada perfil puede guardar:
-- Estatura.
-- Peso inicial.
-- Peso objetivo.
-- Pesajes con fecha.
-
-La pantalla Peso muestra:
-- Peso inicial, actual y objetivo.
-- Porcentaje de avance.
-- Kilos bajados o subidos desde el inicio.
-- Kilos restantes hasta el objetivo.
-- IMC actual como dato orientativo.
-- Historial de pesajes.
-
-Valores iniciales incluidos:
-- Gus: 188 cm, 96 kg inicial, objetivo 90 kg.
+## Datos corporales iniciales
+- Gus: 186 cm, 96 kg inicial, objetivo 90 kg.
 - Tam: 160 cm, 65 kg inicial, objetivo 60 kg.
 
-Se pueden editar en Ajustes > Datos corporales.
+Todos son editables.
 
-
-## Novedades v6
-
-- Gus parte de 186 cm (1,86 m).
-- Tam parte de 160 cm (1,60 m).
-- La estatura sigue siendo editable para cada perfil.
-- Al modificar estatura, peso inicial, peso objetivo o registrar un nuevo peso,
-  la app recalcula automáticamente los datos derivados y el IMC.
+## Actualizar GitHub
+Sustituye los archivos del repositorio por los de este ZIP y haz Commit changes.
+No hace falta crear otro repositorio ni volver a configurar Pages.

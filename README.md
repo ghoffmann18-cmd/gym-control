@@ -72,3 +72,12 @@ Valores iniciales incluidos:
 - Tam: 160 cm, 65 kg inicial, objetivo 60 kg.
 
 Se pueden editar en Ajustes > Datos corporales.
+
+
+## Novedades v6
+
+- Gus parte de 186 cm (1,86 m).
+- Tam parte de 160 cm (1,60 m).
+- La estatura sigue siendo editable para cada perfil.
+- Al modificar estatura, peso inicial, peso objetivo o registrar un nuevo peso,
+  la app recalcula automáticamente los datos derivados y el IMC.

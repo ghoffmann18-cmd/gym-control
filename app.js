@@ -57,7 +57,7 @@ function emptyData(){
     profiles: {
       gus: {
         name:'Gus',
-        heightCm:188,
+        heightCm:186,
         startWeightKg:96,
         goalWeightKg:90,
         workouts:[],
@@ -659,7 +659,7 @@ function renderWeight(v){
       <div class="editor-heading">
         <div>
           <h2>Progreso corporal</h2>
-          <div class="small muted">${esc(profile.heightCm)} cm de estatura</div>
+          <div class="small muted">${(Number(profile.heightCm)/100).toFixed(2).replace('.', ',')} m · ${esc(profile.heightCm)} cm</div>
         </div>
         ${progress?`<span class="badge">${progress.percent}% objetivo</span>`:''}
       </div>
@@ -772,7 +772,7 @@ function renderSettings(v){
       <form id="bodyProfileForm">
         <div class="editor-grid">
           <div class="field">
-            <label>Estatura (cm)</label>
+            <label>Estatura editable (cm)</label>
             <input id="heightCm" type="number" min="100" max="230" step="1" value="${esc(currentProfile().heightCm)}">
           </div>
           <div class="field">
@@ -786,6 +786,9 @@ function renderSettings(v){
         </div>
         <div class="actions" style="margin-top:10px">
           <button class="primary" type="submit">Guardar datos corporales</button>
+        </div>
+        <div class="small muted" style="margin-top:8px">
+          Al cambiar estatura, peso inicial u objetivo, el progreso y los cálculos se actualizan automáticamente.
         </div>
       </form>
     </div>
@@ -819,7 +822,7 @@ function renderSettings(v){
       <button class="ghost" id="changeProfile">Cambiar de perfil</button>
     </div>
 
-    <div class="small muted" style="text-align:center;margin-top:12px">Gym Control v5</div>`;
+    <div class="small muted" style="text-align:center;margin-top:12px">Gym Control v6</div>`;
 
   document.getElementById('saveName').addEventListener('click',()=>{
     const val=document.getElementById('profileName').value.trim();

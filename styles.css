@@ -60,3 +60,27 @@ button{cursor:pointer}
 .profile-choice button{min-height:74px;font-size:18px}
 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .empty{padding:18px;text-align:center;color:var(--muted)}
+
+
+button:disabled{opacity:.38;cursor:not-allowed}
+.file-label{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.compact{min-height:38px;padding:7px 10px;border-radius:10px}
+.icon-btn{min-width:38px;min-height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-weight:900}
+.mini-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.manage-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.manage-row:first-child{border-top:0;padding-top:0}
+.manage-row:last-child{padding-bottom:0}
+.manage-main{min-width:0;flex:1}
+.editor-card{border-top:1px solid var(--line);padding:14px 0}
+.editor-card:first-child{border-top:0;padding-top:0}
+.editor-heading{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.editor-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media(max-width:620px){
+  .manage-row{align-items:flex-start;flex-direction:column}
+  .mini-actions{justify-content:flex-start}
+  .editor-heading{flex-direction:column}
+  .editor-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:360px){
+  .editor-grid{grid-template-columns:1fr}
+}

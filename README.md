@@ -1,33 +1,51 @@
-# Gym Control
+# Gym Control v4
 
-PWA personal para registrar rutinas de gimnasio, pesos, repeticiones, piscina y peso corporal.
+PWA personal para registrar rutinas, pesos, repeticiones, piscina y peso corporal.
+
+## Novedades v4
+
+- Editor de rutinas dentro de la propia app.
+- Cambiar nombre de ejercicios sin perder la relación con el historial.
+- Cambiar series y rango de repeticiones.
+- Cambiar un ejercicio entre peso/repeticiones y tiempo.
+- Añadir ejercicios.
+- Eliminar ejercicios sin borrar el historial anterior.
+- Reordenar ejercicios.
+- Crear nuevas rutinas.
+- Eliminar y reordenar rutinas.
+- Editar duración y plan de piscina.
+- Rutinas independientes por perfil (Gus / Tam).
+- Restablecer las rutinas originales sin borrar el historial.
+- La copia de seguridad incluye rutinas personalizadas.
+
+## Actualizar desde una versión anterior
+
+Sustituye en GitHub los archivos del proyecto por los de esta versión y haz Commit.
+NO hace falta borrar el repositorio ni cambiar GitHub Pages.
+
+La app mantiene la misma clave local (`gymControlV1`), por lo que los entrenamientos y pesos
+ya guardados en el mismo iPhone y bajo la misma URL de GitHub Pages se conservan.
+
+Al abrir v4 por primera vez, si un perfil todavía no tenía rutinas personalizadas, la app copia
+las rutinas originales a ese perfil automáticamente.
+
+## Editar rutinas
+
+En la app:
+
+Ajustes > Editar rutinas
+
+Cada perfil tiene sus propias rutinas locales.
 
 ## Publicar con GitHub Pages
 
-1. Crea un repositorio nuevo en GitHub, por ejemplo `gym-control`.
-2. Sube todos los archivos de esta carpeta al repositorio.
-3. En GitHub abre **Settings > Pages**.
-4. En **Build and deployment**, elige **Deploy from a branch**.
-5. Selecciona la rama `main` y la carpeta `/ (root)`.
-6. Guarda.
-7. GitHub mostrará la URL pública de la app.
+1. Sube `index.html`, `app.js`, `styles.css`, `manifest.json`, `sw.js`, `README.md` y `icons/`.
+2. Settings > Pages.
+3. Deploy from a branch.
+4. `main` y `/ (root)`.
 
-## Instalar en iPhone
+## Copias de seguridad
 
-1. Abre la URL de GitHub Pages en Safari.
-2. Pulsa **Compartir**.
-3. Pulsa **Añadir a pantalla de inicio**.
-4. Abre Gym Control desde su icono.
+Ajustes > Exportar datos.
 
-## Datos
-
-Los entrenamientos se guardan localmente en cada dispositivo. Usa Ajustes > Exportar datos para hacer copias de seguridad.
-
-## Perfiles
-
-La primera vez, cada iPhone puede elegir su perfil. Cada dispositivo recuerda el perfil elegido.
-
-
-Versión de caché: v2 (actualizaciones de GitHub Pages mejoradas).
-
-Versión UI: v3 — corregido el solapamiento con la barra de estado / notch / Dynamic Island de iPhone.
+El JSON exportado contiene perfiles, entrenamientos, peso corporal y rutinas personalizadas.
